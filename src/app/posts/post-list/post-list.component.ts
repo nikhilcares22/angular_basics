@@ -6,8 +6,7 @@ import { Component,Input } from "@angular/core"
   styleUrls:["./post-list.component.css"]
 })
 export class PostListComponent {
-  @Input() posts:any = [];//not working
-  // posts:any=[]
+  @Input() posts:any = [];
   // posts:Array<any>=[
   //   // {title:"First Post",content:"This is the first post."},
   //   // {title:"Angular Course",content:"This Course will cover the basics of angular and the instructor is Maxmillan."},
