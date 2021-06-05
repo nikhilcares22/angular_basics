@@ -20,10 +20,11 @@ export class PostListComponent implements OnInit, OnDestroy {
       .getPostUpdateListener()
       .subscribe((posts: Post[]) => {
           this.isLoading = false;
-        this.posts = posts;
+          this.posts = posts;
+          console.log('===>',this.posts)
       });
   }
-  onDelete(postId:string|null|undefined){
+  onDelete(postId: string | null | undefined) {
     this.postsService.deletePost(postId);
   }
   ngOnDestroy() {
