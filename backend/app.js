@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const postRoutes = require("./routes/posts");
+const userRoutes = require("./routes/user");
 const path =  require("path");
 require("dotenv").config();
 require("./connection/db");
@@ -23,5 +24,6 @@ app.use((req, res, next) => {
   next();
 });
 app.use('/api/posts',postRoutes)
+app.use('/api/user',userRoutes)
 
 module.exports = app;

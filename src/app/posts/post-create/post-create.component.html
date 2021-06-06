@@ -1,34 +1,41 @@
-<mat-spinner *ngIf="isLoading"></mat-spinner>
 <mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form [formGroup]="form" *ngIf="!isLoading" (submit)="onSavePost()">
     <mat-form-field>
       <input
-      matInput type="text"
-      formControlName="title"
-      placeholder="Post Title">
-      <mat-error *ngIf="getControl.title.invalid">Please Enter a Post Title.</mat-error>
+        matInput
+        type="text"
+        formControlName="title"
+        placeholder="Post Title"
+      />
+      <mat-error *ngIf="getControl.title.invalid"
+        >Please Enter a Post Title.</mat-error
+      >
     </mat-form-field>
     <div>
-        <button mat-stroked-button type="button" (click)="filepicker.click()">
-            Pick Image
-        </button>
-        <input type="file" #filepicker (change)="onImagePicked($event)">
+      <button mat-stroked-button type="button" (click)="filepicker.click()">
+        Pick Image
+      </button>
+      <input type="file" #filepicker (change)="onImagePicked($event)" />
     </div>
-    <div class="image-preview" *ngIf="imagePreview!=='' && imagePreview && getControl.image.valid">
-        <img [src]="imagePreview" [alt]="getControl.title">
+    <div
+      class="image-preview"
+      *ngIf="imagePreview !== '' && imagePreview && getControl.image.valid"
+    >
+      <img [src]="imagePreview" [alt]="getControl.title" />
     </div>
     <mat-form-field>
       <textarea
-      matInput rows="4"
-      formControlName="content"
-      placeholder="Post Content">
-    </textarea>
-    <mat-error *ngIf="getControl.content.invalid">Please Enter Post Content.</mat-error>
+        matInput
+        rows="4"
+        formControlName="content"
+        placeholder="Post Content"
+      >
+      </textarea>
+      <mat-error *ngIf="getControl.content.invalid"
+        >Please Enter Post Content.</mat-error
+      >
     </mat-form-field>
-    <button
-    mat-raised-button
-    color="accent"
-    type="submit"
-    >save post</button>
+    <button mat-raised-button color="accent" type="submit">save post</button>
   </form>
 </mat-card>
