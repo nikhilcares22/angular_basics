@@ -2,7 +2,6 @@ const express = require("express");
 const Model = require("../models");
 const router = express.Router();
 const multer = require("multer");
-const path = require("path");
 const MIME_TYPE_MAP = {
   "image/png": "png",
   "image/jpeg": "jpg",
@@ -36,10 +35,21 @@ router.post(
 );
 
 router.get("/", async (req, res, next) => {
-  const posts = await Model.Post.find();
+  const pageSize = +req.query.pagesize;
+  const currentPage = +req.query.page;
+  const postQuery = Model.Post.find();
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+  }
+  const posts = await postQuery;
+  const postCount = await Model.Post.countDocuments();
   res
     .status(200)
-    .json({ message: "Posts fetched successfully.", posts: posts });
+    .json({
+      message: "Posts fetched successfully.",
+      posts: posts,
+      maxPosts: postCount,
+    });
 });
 
 router.get("/:id", async (req, res, next) => {
@@ -53,7 +63,7 @@ router.put(
   "/:id",
   multer({ storage }).single("image"),
   async (req, res, next) => {
-      console.log(req.body)
+    console.log(req.body);
     if (req.file) {
       const url = req.protocol + "://" + req.get("host");
       req.body.image = url + "/images/" + req.file.filename;
