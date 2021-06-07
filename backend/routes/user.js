@@ -25,15 +25,14 @@ router.post("/signup", async (req, res, next) => {
 router.post("/login", async (req, res, next) => {
   try {
     let userExists = await Model.User.findOne({ email: req.body.email });
-    if (!userExists) return res.status(401).json({message:"Auth failed"})
+    if (!userExists) return res.status(401).json({ message: "Auth failed" });
     const ifUserPass = await userExists.authenticate(req.body.password);
-    if (!ifUserPass)
-        return res.status(401).json({message:"Auth failed"})
+    if (!ifUserPass) return res.status(401).json({ message: "Auth failed" });
     const token = await jwtService.sign({
       id: userExists._id,
       email: userExists.email,
     });
-    return res.status(200).json({ token });
+    return res.status(200).json({ token, expiresIn: 3600 });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });

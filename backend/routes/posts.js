@@ -2,6 +2,7 @@ const express = require("express");
 const Model = require("../models");
 const router = express.Router();
 const multer = require("multer");
+const jwtService = require("../common/jwtService");
 const MIME_TYPE_MAP = {
   "image/png": "png",
   "image/jpeg": "jpg",
@@ -24,6 +25,7 @@ const storage = multer.diskStorage({
 
 router.post(
   "/",
+  jwtService.verify("user"),
   multer({ storage }).single("image"),
   async (req, res, next) => {
     const post = req.body;
@@ -43,13 +45,11 @@ router.get("/", async (req, res, next) => {
   }
   const posts = await postQuery;
   const postCount = await Model.Post.countDocuments();
-  res
-    .status(200)
-    .json({
-      message: "Posts fetched successfully.",
-      posts: posts,
-      maxPosts: postCount,
-    });
+  res.status(200).json({
+    message: "Posts fetched successfully.",
+    posts: posts,
+    maxPosts: postCount,
+  });
 });
 
 router.get("/:id", async (req, res, next) => {
@@ -61,6 +61,7 @@ router.get("/:id", async (req, res, next) => {
 
 router.put(
   "/:id",
+  jwtService.verify("user"),
   multer({ storage }).single("image"),
   async (req, res, next) => {
     console.log(req.body);
@@ -81,7 +82,7 @@ router.put(
   }
 );
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", jwtService.verify("user"), async (req, res, next) => {
   await Model.Post.findOneAndDelete({ _id: ObjectId(req.params.id) });
   res.status(200).json({ message: "Posts deleted successfully." });
 });

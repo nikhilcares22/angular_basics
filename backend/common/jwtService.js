@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const { decode } = require("punycode");
 const Model = require("../models");
 module.exports = {
   sign: function (data) {
@@ -18,17 +17,6 @@ module.exports = {
       );
     });
   },
-  verifyToken: function (token) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let decodedData = await jwt.verify(token, process.env.JWTSECRET);
-        return resolve(decodedData);
-      } catch (error) {
-        console.log(error);
-        return reject(error);
-      }
-    });
-  },
   verify:
     (...args) =>
     async (req, res, next) => {
@@ -37,7 +25,7 @@ module.exports = {
         const token = String(req.headers.authorization || "")
           .replace(/bearer|jwt/i, "")
           .replace(/^\s+|\s$/i, "");
-        const decoded = this.verifyToken(token);
+        const decoded = jwt.verify(token, process.env.JWTSECRET)
         let doc;
         let role;
         if (roles.includes("user")) {
@@ -54,7 +42,7 @@ module.exports = {
         console.log(error);
         return res
           .status(401)
-          .json({ message: error.message || "Auth Failed" });
+          .json({ message:  "Auth Failed" });
       }
     },
 };
