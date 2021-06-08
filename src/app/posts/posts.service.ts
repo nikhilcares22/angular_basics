@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
 @Injectable({ providedIn: 'root' })
 export class PostsService {
   private posts: Post[] = [];
-  private postsUpdated = new Subject<any/* { posts: Post[];postsCount: number } */>();
+  private postsUpdated =
+    new Subject<any /* { posts: Post[];postsCount: number } */>();
 
   constructor(private http: HttpClient, private router: Router) {}
   getPosts(postsPerPage: number, currentPage: number) {
@@ -27,6 +28,7 @@ export class PostsService {
                 content: post.content,
                 id: post._id,
                 image: post.image,
+                user: post.user,
               };
             }),
             maxPosts: postData.maxPosts,
@@ -87,6 +89,7 @@ export class PostsService {
         image: image,
         title: title,
         content: content,
+        user: null,
       };
     }
     this.http
@@ -96,7 +99,6 @@ export class PostsService {
       });
   }
   deletePost(postId: string | null | undefined) {
-    return this.http
-      .delete('http://localhost:3000/api/posts/' + postId);
+    return this.http.delete('http://localhost:3000/api/posts/' + postId);
   }
 }

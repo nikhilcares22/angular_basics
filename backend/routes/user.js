@@ -32,7 +32,7 @@ router.post("/login", async (req, res, next) => {
       id: userExists._id,
       email: userExists.email,
     });
-    return res.status(200).json({ token, expiresIn: 3600 });
+    return res.status(200).json({ token, expiresIn: 3600,userId:userExists._id });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });

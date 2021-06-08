@@ -31,6 +31,7 @@ router.post(
     const post = req.body;
     const url = req.protocol + "://" + req.get("host");
     post.image = url + "/images/" + req.file.filename;
+    post.user = req.user._id;
     const data = await Model.Post.create(post);
     res.status(201).json({ message: "Added Successfully.", data });
   }
@@ -64,18 +65,22 @@ router.put(
   jwtService.verify("user"),
   multer({ storage }).single("image"),
   async (req, res, next) => {
-    console.log(req.body);
     if (req.file) {
       const url = req.protocol + "://" + req.get("host");
       req.body.image = url + "/images/" + req.file.filename;
     }
+    req.body.user = req.user._id;
     const posts = await Model.Post.findOneAndUpdate(
       {
         _id: ObjectId(req.params.id),
+        user: req.user._id,
       },
       { $set: req.body },
       { new: true }
     );
+
+    if (!posts) return res.status(401).json({ message: "Not authorised" });
+
     res
       .status(200)
       .json({ message: "Posts updated successfully.", posts: posts });
@@ -83,7 +88,13 @@ router.put(
 );
 
 router.delete("/:id", jwtService.verify("user"), async (req, res, next) => {
-  await Model.Post.findOneAndDelete({ _id: ObjectId(req.params.id) });
+  const posts = await Model.Post.findOneAndDelete({
+    _id: ObjectId(req.params.id),
+    user: req.user._id,
+  });
+
+  if (!posts) return res.status(401).json({ message: "Not authorised" });
+
   res.status(200).json({ message: "Posts deleted successfully." });
 });
 
