@@ -35,14 +35,14 @@ module.exports = {
             email: decoded.email,
           });
         }
-        if (!doc) throw new Error("Invalid Token");
+        if (!doc) throw new Error("You are not authenticated!");
         req[role] = doc;
         next();
       } catch (error) {
         console.log(error);
         return res
           .status(401)
-          .json({ message:  "Auth Failed" });
+          .json({ message:  "You are not authenticated!" });
       }
     },
 };

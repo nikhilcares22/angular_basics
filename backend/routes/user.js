@@ -17,7 +17,7 @@ router.post("/signup", async (req, res, next) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: error.message,
+      message: "Invalid authentication credentials!",
     });
   }
 });
@@ -25,9 +25,9 @@ router.post("/signup", async (req, res, next) => {
 router.post("/login", async (req, res, next) => {
   try {
     let userExists = await Model.User.findOne({ email: req.body.email });
-    if (!userExists) return res.status(401).json({ message: "Auth failed" });
+    if (!userExists) return res.status(401).json({ message: "Invalid Authentication credentials" });
     const ifUserPass = await userExists.authenticate(req.body.password);
-    if (!ifUserPass) return res.status(401).json({ message: "Auth failed" });
+    if (!ifUserPass) return res.status(401).json({ message: "Invalid Authentication credentials" });
     const token = await jwtService.sign({
       id: userExists._id,
       email: userExists.email,
