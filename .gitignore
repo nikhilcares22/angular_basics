@@ -2,8 +2,11 @@
 
 # compiled output
 /dist
+/src
 /tmp
 /out-tsc
+/backend/node_modules
+/backend/uploads
 # Only exists if Bazel was run
 /bazel-out
 
