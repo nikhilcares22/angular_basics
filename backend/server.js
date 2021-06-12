@@ -1,4 +1,4 @@
-var app = require("./backend/app");
+var app = require("./app");
 var http = require("http");
 
 function normalizePort(val) {
