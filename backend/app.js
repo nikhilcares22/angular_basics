@@ -9,6 +9,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/images",express.static(path.join("backend/uploads")))
+app.use(express.static(path.join(__dirname, '../dist/angular-course/')));
+app.use(/^((?!(api|uploads)).)*/, (req, res) => {
+  res.sendFile(path.join(__dirname, "../dist/portfolio-two/index.html"));
+});
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
