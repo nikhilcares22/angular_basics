@@ -10,7 +10,7 @@
 # Only exists if Bazel was run
 /bazel-out
 
-./content.zip
+content.zip
 # dependencies
 /node_modules
 
