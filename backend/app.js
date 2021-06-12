@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/images",express.static(path.join("backend/uploads")))
 app.use(express.static(path.join(__dirname, '../dist/angular-course/')));
 app.use(/^((?!(api|uploads)).)*/, (req, res) => {
+    console.log("in")
   res.sendFile(path.join(__dirname, "../dist/angular-course/index.html"));
 });
 
